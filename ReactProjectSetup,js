@@ -1,0 +1,207 @@
+// 1. Install node, react, react-dom, 
+// npm i react react-dom
+
+
+// 2. install vite or webpack and its plugin and loaders as dev-dependencies 
+// npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader html-webpack-plugin sass sass-loader style-loader url-loader webpack webpack-cli webpack-dev-server
+
+// for complete webpack + react project setup use instruction from https://www.educative.io/answers/how-to-create-a-react-application-with-webpack
+
+// src/index.js 
+
+import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { Provider } from "react-redux";
+import store from "./store";
+
+ import { positions, transitions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+const options = {
+  timeout: 5000,
+  position: positions.BOTTOM_CENTER,
+  transition: transitions.SCALE,
+};
+
+ReactDOM.render(
+  <Provider store={store}>
+    {/* Optional AlertProvider */}
+    <AlertProvider template={AlertTemplate} {...options}>
+      <App />
+    </AlertProvider>
+  </Provider>,
+  document.getElementById("root")
+);
+
+// reducer function takes state and actionType and payload as param and returns the updated new state as per actions and the components using the store's state would re-render when it receives updates in store's state.
+
+export const productsReducer = (state = { products: [] }, action) => {
+    switch (action.type) {
+      case ALL_PRODUCT_REQUEST:
+      case ADMIN_PRODUCT_REQUEST:
+        return {
+          loading: true,
+          products: [],
+        };
+      case ALL_PRODUCT_SUCCESS:
+        return {
+          loading: false,
+          products: action.payload.products,
+          productsCount: action.payload.productsCount,
+          resultPerPage: action.payload.resultPerPage,
+          filteredProductsCount: action.payload.filteredProductsCount,
+        };
+  
+      case ADMIN_PRODUCT_SUCCESS:
+        return {
+          loading: false,
+          products: action.payload,
+        };
+      case ALL_PRODUCT_FAIL:
+      case ADMIN_PRODUCT_FAIL:
+        return {
+          loading: false,
+          error: action.payload,
+        };
+  
+      case CLEAR_ERRORS:
+        return {
+          ...state,
+          error: null,
+        };
+      default:
+        return state;
+    }
+  };
+
+
+  // in src/store.js we can combine reducres, apply middleware and create store with initialState 
+
+  import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+const middleware = [thunk];
+
+const store = createStore(
+    combineReducers({products : productsReducer}),
+    {products : []},
+    composeWithDevTools(applyMiddleware(...middleware))
+  );
+
+  // Below is implementation of ProtectRoute 
+
+import React, { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { Redirect, Route, Switch } from "react-router-dom";
+
+const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
+  const { loading, isAuthenticated, user } = useSelector((state) => state.user);
+
+  return (
+    <Fragment>
+      {loading === false && (
+        <Route
+          {...rest}
+          render={(props) => {
+            if (isAuthenticated === false) {
+              return <Redirect to="/login" />;
+            }
+
+            if (isAdmin === true && user.role !== "admin") {
+              return <Redirect to="/login" />;
+            }
+
+            return <Component {...props} />;
+          }}
+        />
+      )}
+    </Fragment>
+  );
+};
+
+export ProtectedRoute;
+
+// it can be called in App.js like 
+
+function App (){
+
+    // would work like componentDidMount as dependency array is empty 
+    useEffect(()=> store.dispatch(someAction(payload)), [])
+return (
+    <Header />
+    <Router>
+        <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/product/:id" component={ProductDetails} />
+            <Route exact path="/products" component={Products} />
+            <Route path="/products/:keyword" component={Products} />
+
+            <Route exact path="/search" component={Search} />
+
+
+            <ProtectedRoute exact path="/account" component={Profile} />
+
+            <ProtectedRoute exact path="/me/update" component={UpdateProfile} />
+
+            <ProtectedRoute exact
+            path="/password/update"
+            component={UpdatePassword}
+            />
+
+            <Route exact path="/password/forgot" component={ForgotPassword} />
+        </Switch>
+    </Router>
+    <Footer />
+);
+
+}
+
+export default App;
+
+// actions function with dispatch defined in action files : 
+
+// Load User
+export const loadUser = () => async (dispatch) => {
+    try {
+      dispatch({ type: LOAD_USER_REQUEST });
+  
+      const { data } = await axios.get(`/api/v1/me`);
+  
+      dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+    } catch (error) {
+      dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
+    }
+  };
+  
+  // Logout User
+  export const logout = () => async (dispatch) => {
+    try {
+      await axios.get(`/api/v1/logout`);
+  
+      dispatch({ type: LOGOUT_SUCCESS });
+    } catch (error) {
+      dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
+    }
+  };
+
+  // Register
+export const register = (userData) => async (dispatch) => {
+    try {
+      dispatch({ type: REGISTER_USER_REQUEST });
+  
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+  
+      const { data } = await axios.post(`/api/v1/register`, userData, config);
+  
+      dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
+    } catch (error) {
+      dispatch({
+        type: REGISTER_USER_FAIL,
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  // reduxjs toolkit provide react-redux hooks like useSelector and useDispatch for reading and dispatching actions to redux store for detailed description go through https://redux-toolkit.js.org/tutorials/quick-start

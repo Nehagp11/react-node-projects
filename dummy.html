@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Welcome Neha </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+          .dropdown{
+            position: relative;
+            display: inline-block;
+          }
+
+          .dropbtn{
+            background-color: green;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+          }
+
+          .dropdown-content{
+            position: absolute;
+            display: none;
+            min-width: 120px;
+            background-color: #eee;
+          }
+
+          .dropdown-content a {
+            display: block;
+            border-bottom: 1px solid #aaa;
+            text-align: center;
+            font-size: 14px;
+            padding: 6px;
+            outline: none;
+            text-decoration: none;
+          }
+
+          .show {
+            display: block;
+          }
+
+        </style>
+
+    </head>
+    <!-- <body>
+        <h1>Dummy Application </h1>
+        <script src="" async defer></script>
+    </body> -->
+    <body>
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="#">Link 1</a>
+              <a href="#">Link 2</a>
+              <a href="#">Link 3</a>
+            </div>
+          </div>
+
+        <div id="dog-facts"></div>
+        <button id="load-more">Load More Facts</button>
+      
+        <script>
+          function myFunction(e){
+            document.querySelector('.dropdown-content').classList.add('show');
+          }
+
+          const dogFactsEl = document.getElementById('dog-facts');
+          const loadMoreBtn = document.getElementById('load-more');
+      
+          const loadSomeDogFacts = (numberOfFacts = 5) => {
+            const DOG_URL = `https://pokeapi.co/api/v2/pokemon/1`;
+            fetch(DOG_URL)
+              .then(response => response.json())
+              .then(responseJson => {
+                for (let fact of responseJson['abilities']) {
+                  const dogFact = document.createElement('p');
+                  dogFact.innerText = fact.ability.name;
+                  dogFactsEl.append(dogFact);
+                }
+              })
+          }
+
+          let cacheName = 'pokemonData'; 
+          let url = 'https://pokeapi.co/api/v2/pokemon/1';
+          caches.open(cacheName).then( cache => {
+            cache.add(url).then( () => {
+                console.log("Data cached ");
+              });
+          });
+
+          loadMoreBtn.addEventListener('click', () => {
+            loadSomeDogFacts(3);
+          })
+      
+        </script>
+    </body>
+</html>
+

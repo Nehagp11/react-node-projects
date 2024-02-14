@@ -1,0 +1,227 @@
+<App>
+    <ErrorBoundary>
+    <Container content={pageContent}>
+        <switch>
+            <DashBord>
+                <filterBtn></filterBtn>
+                <taskListComponent taskType="Open Tickets" taskList={this.state.taskOpen}></taskListComponent>
+                <taskListComponent taskType="In progress Tickets" taskList={this.state.taskOpen}></taskListComponent>
+                <taskListComponent taskType="Open Tickets" taskList={this.state.taskOpen}></taskListComponent>
+            </DashBord>
+        </switch>
+    </Container>
+    </ErrorBoundary>
+</App>
+
+class DashBord(params) {
+    this.state = {filterdto : {}, taskList : [], taskOpen : [], taskDone : [], taskInProgress : []}
+}
+
+    
+Day 1
+Basics of System Design
+Learn the architecture, challenges, and strategies for building distributed systems.
+
+Foundational Concepts
+Understand CAP Theorem, Load Balancer, Consistent Hashing, Vertical v/s Horizontal Scaling etc.
+
+Interview Preparation
+Understand how to approach HLD Interview Problems.
+
+Database Insights
+Understand different types of databases and database sharding techniques.
+
+     
+Day 2
+Master System Design
+Create the System Design of a Messenger App prototype.
+
+System Design Techniques
+Explore techniques to improve system performance using caches, and strategies like cache eviction.
+
+Communication Models
+Understand modes of communication like Websockets, Polling etc.
+
+Build a Prototype
+Code a POC for a Facebook Messenger-type prototype using best practices
+
+https://blog.logrocket.com/javascript-cache-api/
+
+
+APIS ==> 1) Authorisation APIs ==> to validate the user 
+2) get the task list with only current userid  filterdto : {user : [currentUser], boardId : board, state : [ticketStates], labels :[labels], pageIndex : 2, }
+3) drag and drop feature ==> to update a specific ticket id it will take updateTicketState(ticketID, currentState, comments);
+
+Advanced Concepts should need to Know :
+
+1. Kafka and Kubernates 
+2. Cloud platform AWS, Azure 
+3. Containerised Applications and Edge Servers 
+4. Forward proxy vs Reverse Proxy (NGINX)
+5. Docker Uses 
+6. LTS in Node modules 
+7. Redis and Load Balancer examples 
+
+
+
+4. Forward proxy lies between clients and public networks(internet) and protects client information/identities like IPs from the requested web servers. 
+so servers only get IP of forward-proxies.  
+many orgainisations like School, Colleges uses Forward proxies to block access to a set of servers. 
+
+Anonymity: Forward proxies can hide the client's IP address, making it difficult for the destination server to trace back to the client.
+Caching: Forward proxies can store frequently accessed resources locally, reducing the response time and bandwidth usage.
+Content filtering: Forward proxies can filter or block certain types of content based on predefined rules, ensuring a safer browsing experience.
+
+Firewall typically comes before a proxy in a network configuration. 
+A firewall is a security device or software that controls and filters incoming and outgoing network traffic based on an organization's pre-established security policies.
+
+Reverse Proxy (NGINX) lies between servers and clients so when a client hits a requested to a particular host first its intercepted/received by the reverse proxy and then reverse-proxy further forward the request to the server and protects server information/identities like IPs and other information from the requested clients. 
+so Clients only get IP of Reverse-proxies.  
+Reverse Proxy also works as Load-Balancers and divide traffic to pool of web-servers.
+Reverse Proxy also caches static contents for a period of time to reduce loads from servers. 
+
+Cloudflare is a popular content delivery network (CDN) that also acts as a reverse proxy. When a website is connected to Cloudflare, it intercepts all incoming requests for that site. 
+Cloudflare's servers then routes the requests to the closest data center, minimizing latency and ensuring faster response times. Furthermore, Cloudflare's reverse proxy capabilities provide additional security features like DDoS protection, bot detection, and content caching.
+
+DoS attacks typically interrupts the server's capabilities/functions by overwhelming or flooding a targeted machine with several requests so that normal traffic is unable to be processed, resulting in denial-of-service to addition users.
+
+Currently, the most popular reverse proxies in use nowadays : 
+1. Nginx, 
+2.Varnish
+3. Apache Traffic Server
+4. HAProxy
+
+However, There are also some disadvantages using reverse-proxies, like : 
+1. If you’re passing HTTPS traffic through the reverse proxy, then it needs to decrypt and re-encrypt the passing data. This means that it must possess the private keys of the SSL/TLS certificate. Thus, if any malicious party can compromise your reverse proxy, they can log passwords and inject malware into your websites.
+2. If you or your users can’t access your main server directly, then using a reverse proxy can lead to a single point of failure. For example, if you’re using a reverse proxy as a front to serve multiple domains, then its outage can lead to all the domains going offline simultaneously.
+3. If you’re relying on a third-party reverse proxy (e.g. Cloudflare), then you’re handing over your site’s sensitive information to them.
+4. It can also caches resources at their end so for updated contents and fixes u need to wait for a particular time period 
+
+Docker allows us to create containers for our applications using Docker Compose and Docker images that contains all applications dependencies in order to provide easy deployment setup for app on different machines. 
+
+Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security lets you run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application,
+
+The Docker daemon (dockerd) listens for Docker API requests from clients and manages Docker objects such as docker images, containers, networks, and volumes. A daemon can also communicate with other daemons to manage Docker services.
+
+When you use the docker pull or docker run commands, Docker pulls the required images from your configured registry. When you use the docker push command, Docker pushes your image to your configured registry.
+
+SOAP API, or simple object access protocol application programming interface, is a standard messaging protocol that operating systems use to communicate via Hypertext Transfer Protocol (HTTP) and Extensible Markup Language (XML). 
+As an API, SOAP allows applications to interact and create, update, delete and recover records such as passwords, accounts and custom objects.
+
+:REST and SOAP use different algorithms when exchanging information between a database and the user interface. SOAP API uses service interfaces like @WebService and REST API uses a URL interface like @path(“ /WeatherService“).
+Use-cases :  SOAP is very secure, which makes it perfect for systems that handle sensitive data, such as financial services and online banking applications.
+disadvantages : SOAP does not support caching API calls and slower and heavier than Rest apis 
+
+For handling many-to-many relationship, we create a map table like user-skills which having columns for user_id and skill_id 
+
+Amazon S3 is object storage. It is not a file system (eg C:\ drive). Rather, applications can place API calls to upload/download data.
+Amazon S3 can also make objects available via HTTP/s without having to run a web server.
+It is not a database (for that, use Amazon Relational Database Service (RDS) or Amazon DynamoDB), however it could be used as a large NoSQL database since the object name is the Key and the contents of the object is the Value. However, DynamoDB is a much faster NoSQL database.
+
+
+The MD5 message-digest algorithm is a widely used hash function producing a 128-bit hash value(or 32 hexadecimal digits). We can use these 32 hexadecimal digit for generating 7 characters long tiny url.
+Encode the long URL using the MD5 algorithm and take only the first 7 characters to generate TinyURL.
+The first 7 characters could be the same for different long URLs so check the DB to verify that TinyURL is not used already
+Try next 7 characters of previous choice of 7 characters already exist in DB and continue until you find a unique value
+
+
+With database we have two options :
+a. Relational databases (RDBMs) like MySQL and Postgres
+
+b. “NoSQL”-style databases like BigTable and Cassandra, MongoDB 
+
+MongoDB supports distributing data across multiple machines using shards. Since we have to support large data sets and high throughput, we can leverage sharding feature of MongoDB.
+Also we can use tinyUrl as shard keys for database partitioning 
+
+To speed up reads (checking whether a Short URL exists in DB or what is Original url corresponding to a short URL) we can create indexing on ShortURL.
+
+https://medium.com/@sandeep4.verma/system-design-scalable-url-shortener-service-like-tinyurl-106f30f23a82
+
+In case of Network partition, when systems can't communicate properly, we need to choose between availability and Consistency, for AP systems we still have Eventually Consistent.
+
+System design Interview Steps -
+1. Gather Requirement about problem statements
+2. Estimate Scale like DAUs, read/write operations count per second, and memory required to store data 
+3. Design Gold Consistency Vs Availability 
+4. Design DB Schemas, and APIs design and functions related to API 
+
+Design Google Search Autocomplete : 
+
+In order to optimize space, We can merge nodes that have only one branch in trie. Now trie will be stored like Suffix tree. 
+A suffix-tree is a compressed trie of all the suffixes of a given string. Suffix trees are useful in solving a lot of string-related problems like pattern matching, finding distinct substrings in a given string, finding the longest palindrome, etc. 
+A suffix tree T is an improvement over trie data structure used in pattern matching problems.
+
+Further, we can store, the frequency of each search results in the trie itself as follows : 
+
+Now, what is the complexity to find all the possible suggestions from a trie given a prefix?
+
+Time complexity to go to the prefix node- O(L)
+L is the length of the prefix
+
+Let's say we have entered RAT - all possible suggestions would be found by going through the entire subtree under RAT and all nodes which have frequency i.e which are complete words will be fetched.
+From RAT we get -- RATAN-10, RATIONAL-12, RATING-15
+Time complexity to find all possible nodes under the prefix node i.e scanning the entire subtree-
+O(N)
+N is the number of nodes under the prefix node
+
+Then we have to sort it in descending order so that the word with the highest frequency is shown at the top.
+And then we get suggestions in the following order for RAT-
+RATING-15, RATIONAL-12, RATAN-10.
+Time complexity to sort the outputs- O(klogk)
+K is the number of top suggestions we want considering the best sorting algorithm.
+
+Thus, our total time complexity would be- O(L)+O(N)+O(KlogK)
+
+To further reduce the latency, we can precompute prefix searches and store it in Hash table where prefix would be the key and search results should be the values 
+
+Now the time complexity to find suggestions for a given prefix would be - O(L) where L is the length of the prefix entered.
+
+We can store this hash table in a cache like Redis so that we can provide suggestions with further time optimization.
+
+ZooKeeper is a service used by a cluster (the group of nodes) to coordinate between themselves and maintain shared data with robust synchronization techniques. Zookeepers can also be used to continuously health trie servers. Zookeeper is very highly available and is very good with lots of reads and some writes.
+
+Reference :  https://systemdesignprep.com/autocomplete
+
+An API gateway is a server (or L7 proxy) between a client and microservices that acts as a centralized entry point for all clients into the system. It is a kind of reverse proxy that accepts client API calls and forwards them to the appropriate microservice (refer to Fig. A below)
+
+Load balancers distribute traffic across multiple servers. This can help to improve performance by reducing the load on any one server. It can also help to improve reliability by ensuring that traffic is still routed to other servers even if one server fails.
+
+API gateways act as a single entry point for API traffic. They can be used to provide authentication, authorization, and routing for API requests. They can also be used to provide caching and monitoring for API traffic.
+
+Reverse proxies sit in front of web servers and forward requests to the appropriate server. They can be used to improve security by hiding the real IP addresses of web servers. They can also be used to improve performance by caching static content.
+
+https://www.devopsschool.com/blog/load-balancers-vs-api-gateway-vs-reverse-proxy/#:~:text=API%20gateways%20act%20as%20a,requests%20to%20the%20appropriate%20server.
+
+ZooKeeper is a service used by a cluster (the group of nodes) to coordinate between themselves and maintain shared data with robust synchronization techniques. Zookeeper is very highly available and is very good with lots of reads and some writes. We are doing very little writes only when we require to split a range into multiple ranges that may happen once a day or once an hour. Thus zookeepers can handle this very well
+ZooKeeper mainly works in distributed environment and allows servers to coordinate properly, Also it provides distributed synchronization among servers/nodes 
+
+A database snapshot is a read-only, static view of a SQL Server database (the source database). The database snapshot is transactionally consistent with the source database as of the moment of the snapshot's creation. A database snapshot always resides on the same server instance as its source database. While database snapshots provide a read-only view of the data in the same state as when the snapshot was created, 
+
+Snapshot copies the state of a system at a certain point in time, preserving a virtual picture of your server’s file system and settings. 
+Unlike a backup, which performs a full copy of your data, a snapshot only copies the settings and metadata required to restore your data in the event of a disruption. You still need to store the source files for your snapshots in a separate location to be able to retrieve them.
+
+Denormalization is the process of adding precomputed redundant data to a normalized relational database to improve read performance of the database. Normalizing a database involves removing redundancy so only a single copy exists of each piece of information. Denormalizing a database requires data has first been normalized.
+
+Following steps are followed while scaling database:
+
+Step 1: Query Optimization & Connection Pool implementation: Includes denormalization and Indexing
+Step 2: Vertical Scaling or Scale-Up
+Step 3: Command Query Responsibility Segregation (CQRS):
+Step 4: Multi Primary Replication
+Step 5: Partitioning
+Step 6: Horizontal Scaling
+Step 7: Data Centre Wise Partition
+Sharding is an important concept used while scaling databases.
+
+When you add more database servers to your network, you will be partitioning your data amongst these servers. This is called Data Partitioning or DB SHARDING. Now you didn’t scale your single database server bigger and bigger which means you didn’t scale it vertically. But you added more DB servers and then partitioned data horizontally across servers. This is called Horizontal partitioning.
+
+https://systemdesignprep.com/scalability
+
+the 2 cache invalidation Schemes-
+1. Write through cache
+2. Write back cache
+
+SQL Vs NOSQL 
+https://www.youtube.com/watch?v=xQnIN9bW0og
+
+1. SQL Queryies need joins for insertion and retrieval of data, and expensive while adding new data columns in existing table  
